@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: setup-job
+  namespace: des
+spec:
+  template:
+    spec:
+      containers:
+        - name: setup-job
+          image: des:latest
+          imagePullPolicy: Never
+          command: [./docker/self-hosted/setup.sh]
+          envFrom:
+            - configMapRef:
+                name: common-config-map
+            - secretRef:
+                name: common-secret
+      restartPolicy: Never

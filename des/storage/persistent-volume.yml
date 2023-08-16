@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: des-storage-persistent-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    # This is assuming a minikube cluster, see:
+    # https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/
+    path: /data/des-storage-persistent-volume
