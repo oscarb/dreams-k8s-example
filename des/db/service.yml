@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: des
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: db
