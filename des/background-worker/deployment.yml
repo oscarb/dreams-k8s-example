@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: background-worker-deployment
+  namespace: des
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: background-worker
+  template:
+    metadata:
+      labels:
+        app: background-worker
+    spec:
+      containers:
+        - name: background-worker
+          image: des:latest
+          imagePullPolicy: Never
+          command:
+            - ./docker/self-hosted/run-background-worker.sh
+          envFrom:
+            - configMapRef:
+                name: common-config-map
+            - secretRef:
+                name: common-secret
+          resources:
+            limits:
+              cpu: 1024m
+              memory: 1024Mi
+            requests:
+              cpu: 512m
+              memory: 512Mi
