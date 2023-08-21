@@ -14,6 +14,13 @@ Follow the [installation steps for your platform](https://minikube.sigs.k8s.io/d
 minikube start
 ```
 
+To check the progress and status of created resources in this guide, it's
+helpful to spin up the minikube dashboard:
+
+```sh
+minikube dashboard
+```
+
 You also need the DES docker image available locally, tagged as `des:latest`.
 Ask Customer Success for access to our Container Registry:
 
@@ -23,7 +30,7 @@ docker tag quay.io/dreamstech/des:latest des:latest
 
 Load the image into the minikube cluster:
 
-```
+```sh
 minikube image load des:latest
 ```
 
@@ -117,7 +124,7 @@ des=# \dt
  ...
 ```
 
-## Web server
+## Web Server
 
 Deploy the web-server and create a service so that it is reachable from outside
 the cluster
@@ -141,11 +148,11 @@ The reason for this error message is that there is no *Partner* defined yet.
 
 ## Create a first Partner
 
-Connect to a running web-server pod (`kubectl -n des exec -it <pod name> -- sh`)
-and run:
+Connect to a running web-server pod and execute the `dreams:partner:create` task:
 
-```
-bundle exec rake dreams:partner:create -- \
+```sh
+kubectl -n des exec <pod-name> -- \
+  bundle exec rails dreams:partner:create -- \
   --name=acme \
   --organization='Acme Inc.' \
   --subdomain=acme \
@@ -156,7 +163,7 @@ bundle exec rake dreams:partner:create -- \
 ```
 
 Given that `ROOT_DOMAIN` is configured to `dreams.test` in
-`common/configmap.yml`, and the partner was created with `subdomain=acme`, the
+[des/configmap.yml](des/configmap.yml), and the partner was created with `subdomain=acme`, the
 web-server will now serve requests for this partner at the following paths:
 
 - The Dreams Web App: `acme.dreams.test:<port>`
@@ -193,12 +200,15 @@ Now you can
 
 ## Background Worker
 
-TODO
+To function properly DES also needs a separate container running background
+jobs. Create a deployment for it:
 
-## Deploy a new version
+```sh
+kubectl apply -f des/background-worker/deployment.yml
+```
 
-TODO:
-- Run migrations
-- Make sure there are no pending migrations
-- How to revert to a previous version
-- How to achieve 0-downtime deployments, including versioned assets.
+## Next steps
+
+At this point, you should have a fully functional example deployment of DES.
+For more information on how to integrate DES with your other systems, harden
+the infrastructure, recommended firewall settings etc., see: https://docs.dreams.enterprises/docs/self-hosted/architecture-overview.
