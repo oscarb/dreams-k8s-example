@@ -38,6 +38,17 @@ spec:
           volumeMounts:
             - mountPath: /app/storage
               name: storage-volume
+      initContainers:
+        - name: volume-alpine-ownership
+          image: alpine:3.17
+          command: ["/bin/chown","-R","1000:1000", "/app/storage"]
+          resources:
+            limits:
+              cpu: 256m
+              memory: 100Mi
+          volumeMounts:
+            - name: storage-volume
+              mountPath: /app/storage
       volumes:
         - name: storage-volume
           persistentVolumeClaim:

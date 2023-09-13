@@ -16,4 +16,5 @@ spec:
                 name: common-config-map
             - secretRef:
                 name: common-secret
+      
       restartPolicy: Never
