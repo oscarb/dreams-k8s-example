@@ -25,6 +25,8 @@ You also need the DES docker image available locally, tagged as `des:latest`.
 Ask Customer Success for access to our Container Registry:
 
 ```sh
+docker login -u yourusername -p yourpassword quay.io
+docker pull quay.io/dreamstech/des:latest
 docker tag quay.io/dreamstech/des:latest des:latest
 ```
 
